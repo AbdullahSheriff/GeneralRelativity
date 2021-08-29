@@ -1,5 +1,5 @@
 - 👋 Hi, I’m @AbdullahSheriff
-- 👀 I’m interested in Physics and astronomy
+- 👀 I’m interested in Physics and Astronomy
 - 📫 How to reach me abdullah.sheriff@mail.utoronto.ca
 
 <!---
