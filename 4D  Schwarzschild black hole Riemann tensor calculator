@@ -1,7 +1,7 @@
 from sympy import*
 
 
-S,t,r,theta,phi = symbols(" H t r theta phi")
+S,t,r,theta,phi = symbols(" S t r theta phi")
 #define the coords
 
 
