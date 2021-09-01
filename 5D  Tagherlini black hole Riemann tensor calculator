@@ -48,10 +48,11 @@ def Drivg(i,j,k):
     return diff(g(i,j),coor[k])
 #define inverse of gmunu
 def invg(i,j):
-    K = Matrix([[g(0,0),g(0,1),g(0,2),g(0,3)],
-                [g(1,0),g(1,1),g(1,2),g(1,3)],
-                [g(2,0),g(2,1),g(2,2),g(2,3)],
-                [g(3,0),g(3,1),g(3,2),g(3,3)]])
+    K = Matrix([[g(0,0),g(0,1),g(0,2),g(0,3),g(0,4)],
+                [g(1,0),g(1,1),g(1,2),g(1,3),g(1,4)],
+                [g(2,0),g(2,1),g(2,2),g(2,3),g(2,4)],
+                [g(3,0),g(3,1),g(3,2),g(3,3),g(3,4)],
+                [g(4,0),g(4,1),g(4,2),g(4,3),g(4,4)]])
     return K.inv(method="LU")[i,j]
 
 #define christoffles
@@ -105,13 +106,4 @@ for a in range(4):
                     
                     
                     
-    
-
-
-
-
-
-
-
- 
 
