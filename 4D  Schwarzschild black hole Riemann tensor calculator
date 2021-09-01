@@ -1,0 +1,120 @@
+from sympy import*
+
+
+S,t,r,theta,phi = symbols(" H t r theta phi")
+#define the coords
+
+
+coor = [t,r,theta,phi]
+#define the gmunu
+
+# S= 2GM/c^2  
+def g(i,j):
+    g00 = 1- (S)/(r)
+    g01 = 0
+    g02 = 0
+    g03 = 0
+    g10 = 0
+    g11 = -1/(1- (S)/(r))
+    g01 = 0
+    g12 = 0
+    g13 = 0
+    g20 = 0
+    g21 = 0
+    g22 = -r**2
+    g23 = 0
+    g30 = 0
+    g31 = 0
+    g32 = 0
+    g33 = -r**2*sin(theta)**2
+   
+    
+    return ([[g00,g01,g02,g03],
+             [g10,g11,g12,g13],
+             [g20,g21,g22,g23],
+             [g30,g31,g32,g33],])[i][j]
+#define derivative of gmunu
+def Drivg(i,j,k):
+    return diff(g(i,j),coor[k])
+#define inverse of gmunu
+def invg(i,j):
+    K = Matrix([[g(0,0),g(0,1),g(0,2),g(0,3)],
+                [g(1,0),g(1,1),g(1,2),g(1,3)],
+                [g(2,0),g(2,1),g(2,2),g(2,3)],
+                [g(3,0),g(3,1),g(3,2),g(3,3)]])
+    return K.inv(method="LU")[i,j]
+
+#define christoffles
+
+def Christoffle(i,j,k): 
+    s = 0
+    for l in range(4):
+        s+=0.5*invg(i,l)*(Drivg(k,l,j)+Drivg(l,j,k)-Drivg(j,k,l))
+    return simplify(s)
+
+
+# print non zero elements of Christoffles
+for a in range(4):
+    for b in range(4):
+        for c in range(4):
+            if Christoffle(a,b,c)==0:
+                pass
+            else:
+                print("[",a,b,c,"]",Christoffle(a,b,c))
+
+
+
+
+#define derivative of christoffles
+def DrivC(i,j,k,m):
+    return diff(Christoffle(i,j,k),coor[m])
+
+#define Riemann Tensor
+
+def Riemann(i,j,k,m):
+    s = 0
+    for l in range(4):
+        s+= Christoffle(l,j,m)*Christoffle(i,l,k) - Christoffle(l,j,k)*Christoffle(i,l,m)
+    return simplify(s+DrivC(i,j,m,k)- DrivC(i,j,k,m))
+
+
+# #print non zero elements of Riemann tensor
+for a in range(4):
+    for b in range(4):
+        for c in range(4):
+            for d in range(4):
+                if  Riemann(a,b,c,d)==0:
+                    pass
+                else:
+                    a1='t'
+                    b1='r'
+                    c1='phi'
+                    d1='theta'
+                    
+                    print("[",a,b,c,d,"]",Riemann(a,b,c,d))
+                    
+                    
+                    
+    
+
+
+# checking if solves Vacc Eistine Eqns wt/ 0 cosmolgical constant. 
+
+
+R11= Riemann(0,1,1,0)+Riemann(2,1,1,2)+Riemann(3,1,1,3)
+R22= Riemann(0,2,2,0)+Riemann(1,2,2,1)+Riemann(3,2,2,3)
+R33= Riemann(0,3,3,0)+Riemann(1,3,3,1)+Riemann(2,3,3,2)
+R00= Riemann(1,0,0,1)+Riemann(2,0,0,2)+Riemann(3,0,0,3)
+
+# Ricci scalar
+
+R=simplify(R11*invg(1,1)+R22*invg(2,2)+R33*invg(3,3)+R00*invg(0,0))
+
+
+
+G = [R00,R11,R22,R33]
+
+for i in range(len(G)):
+    if simplify(G[i] - (1/2)*R*g(i,i)) == 0:
+        print('Works for{}'.format(i,i))
+
